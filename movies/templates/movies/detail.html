@@ -2,6 +2,34 @@
 
 {% block body %}
 
-<h1>movie_detail page</h1>
+<h1>{{ movie.title }}</h1>
+
+<p>{{ movie.description }}</p>
+
+<img src={{ movie.poster }}>
+
+{% if request.user.is_authenticated %}
+<form action="{% url 'reviews:create_review' movie.id %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">글 올리기</button>
+</form>
+
+{% endif %}
+
+{% for review in movie.reviews.all %}
+<div>
+    <a href="{% url 'reviews:detail' review.id %}">
+        {{ review.rank }}
+        {{ review.content }}
+        {{ review.reviewer.username }}
+        {{ review.created_at }}
+    </a>
+    
+    {% if request.user.id == review.reviewer.id %}
+        <a href="{% url 'reviews:delete_review' review.id %}">삭제</a>
+    {% endif %}
+</div>
+{% endfor %}
 
 {% endblock %}

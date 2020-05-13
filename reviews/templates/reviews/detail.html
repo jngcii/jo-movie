@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% if request.user.id == review.reviewer.id %}
+    <a href="{% url 'reviews:delete_review' review.id %}">삭제</a>
+{% endif %}
+
+<p>{{ review.rank }}</p>
+<p>{{ review.content }}</p>
+<p>{{ review.reviewer.username }}</p>
+<p>{{ review.created_at }}</p>
+
+
+{% if request.user.is_authenticated %}
+<form action="{% url 'reviews:create_comment' review.id %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">글 올리기</button>
+</form>
+
+{% endif %}
+
+{% for comment in review.comments.all %}
+<div>
+    {{ comment.content }}
+    {{ comment.commenter.username }}
+    {{ comment.created_at }}
+    {% if request.user.id == comment.commenter.id %}
+        <a href="{% url 'reviews:delete_comment' comment.id %}">삭제</a>
+    {% endif %}
+</div>
+{% endfor %}
+
+{% endblock %}

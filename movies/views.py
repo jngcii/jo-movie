@@ -6,10 +6,6 @@ from reviews.forms import ReviewForm
 
 def index(request):
     movies = Movie.objects.all()[:10]
-    for m in movies:
-        print(m.id)
-        print(m.title)
-        print(m.rank)
     context = {
         'movies': movies,
     }

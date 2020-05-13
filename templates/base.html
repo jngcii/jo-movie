@@ -8,7 +8,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a class="navbar-brand" href="{% url 'movies:search' %}">Movie</a>
+      <a class="navbar-brand" href="{% url 'movies:search' %}">조의 영화</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -21,12 +21,18 @@
             <a class="nav-link" href="">
             </a>
         </li>
+        {% if request.user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:signout' %}">로그아웃</a>
+        </li>
+        {% else %}
         <li class="nav-item">
             <a class="nav-link" href="{% url 'users:signin' %}">로그인</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'users:signup' %}">회원가입</a>
         </li>
+        {% endif %}
         </ul>
     </div>
     </nav>
