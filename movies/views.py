@@ -1,10 +1,15 @@
+import requests
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie
 from reviews.forms import ReviewForm
 # Create your views here.
 
 def index(request):
-    movies = Movie.objects.order_by('-rank')[:10]
+    movies = Movie.objects.all()[:10]
+    for m in movies:
+        print(m.id)
+        print(m.title)
+        print(m.rank)
     context = {
         'movies': movies,
     }
@@ -30,3 +35,22 @@ def detail(request, movie_pk):
         'form':form,
     }
     return render(request, 'movies/detail.html', context)
+
+
+
+def scrap(request):
+
+    json_path = 'https://yts.mx/api/v2/list_movies.json?page=2&limit=50'
+    r = requests.get(json_path, auth=('user','pass'))
+    a = r.json()['data']['movies']
+    for ai in a:
+        summary = ai['summary']
+        title = ai['title']
+        url = ai['url']
+        try:
+            Movie.objects.get(title=title)
+            continue
+        except Movie.DoesNotExist:
+            Movie.objects.create(title=title, description=summary, poster=url)
+
+    return redirect('index')

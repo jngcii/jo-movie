@@ -8,4 +8,7 @@ class Movie(models.Model):
 
     @property
     def rank(self):
-        return self.reviews.all().aggregate(models.Avg('rank'))
+        return self.reviews.all().aggregate(models.Avg('rank')) if self.reviews.count() else 0
+
+    def __str__(self):
+        return self.title
