@@ -1,0 +1,1 @@
+alias va="source venv/Scripts/activate";
