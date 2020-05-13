@@ -20,5 +20,9 @@ from movies import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
+    path('movie/', include('movies.urls')),
+    path('review/', include('reviews.urls')),
     path('', views.index, name='index'),
+    path('<int:movie_pk>/', views.detail, name='detail'),
+
 ]

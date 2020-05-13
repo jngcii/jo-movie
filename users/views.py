@@ -23,7 +23,7 @@ def signup(request):
     context = {
         'form': form,
     }
-    return render(request, 'signup.html', context)
+    return render(request, 'users/signup.html', context)
 
 
 def signin(request):
@@ -39,7 +39,7 @@ def signin(request):
     context = {
         'form': form,
     }
-    return render(request, 'signin.html', context)
+    return render(request, 'users/signin.html', context)
 
 
 @login_required
