@@ -7,3 +7,4 @@ User = get_user_model()
 class SignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
+        fields = UserCreationForm.Meta.fields + ('name', )

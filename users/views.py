@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm
@@ -46,3 +46,24 @@ def signin(request):
 def signout(request):
     logout(request)
     return redirect('index')
+
+
+def detail(request, username):
+    person = get_object_or_404(User, username=username)
+    context = {
+        'person': person,
+    }
+    return render(request, 'users/detail.html', context)
+
+
+@login_required
+def follow(request, user_pk):
+    user = request.user
+    person = get_object_or_404(User, pk=user_pk)
+
+    if person in user.followings:
+        user.followings.remove(person)
+    else:
+        user.followings.add(person)
+    
+    return redirect('user_detail')
