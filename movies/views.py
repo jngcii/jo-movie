@@ -4,6 +4,13 @@ from .models import Movie
 # Create your views here.
 
 def index(request):
-    return render(request, 'main.html')
+    movies = Movie.objects.order_by('-rank')
+    context = {
+        'movies': movies,
+    }
+    return render(request, 'main.html', movies)
 
-# 영화추가삭제 ==> 관리자만 (admin page에서 관리)
+
+def search(request):
+    # movies = Movie.objects.filter(title__icontains=)
+    pass
