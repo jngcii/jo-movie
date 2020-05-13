@@ -19,11 +19,11 @@ class Review(models.Model):
     )
     
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='reviews')
-    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE, related_name='reviews')
+    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviews')
     content = models.TextField()
     rank = models.IntegerField(choices=CHOICES)
     
 class Comment(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
-    commenter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE, related_name='comments')
+    commenter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments')
