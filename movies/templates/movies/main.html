@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block body %}
-
-<h1>조의 영화 리뷰 사이트에 오신걸 환영해 자기</h1>
-
+    <h1>조의 영화 리뷰 사이트에 오신걸 환영해 자기</h1>
+    {% for movie in movies %}
+        <h1>movie.title</h1>
+    {% endfor %}
 {% endblock %}
