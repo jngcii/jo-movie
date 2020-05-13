@@ -40,13 +40,13 @@ def detail(request, movie_pk):
 
 def scrap(request):
 
-    json_path = 'https://yts.mx/api/v2/list_movies.json?page=2&limit=50'
+    json_path = 'https://yts.mx/api/v2/list_movies.json?page=1&limit=50'
     r = requests.get(json_path, auth=('user','pass'))
     a = r.json()['data']['movies']
     for ai in a:
         summary = ai['summary']
         title = ai['title']
-        url = ai['url']
+        url = ai['medium_cover_image']
         try:
             Movie.objects.get(title=title)
             continue
