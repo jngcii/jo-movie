@@ -7,5 +7,5 @@ class Movie(models.Model):
     description = models.TextField()
 
     @property
-    def get_rank(self):
+    def rank(self):
         return self.reviews.all().aggregate(models.Avg('rank'))
