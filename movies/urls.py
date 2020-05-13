@@ -3,6 +3,6 @@ from . import views
 
 app_name = 'movies'
 
-ulrpatterns = [
+urlpatterns = [
     path('', views.search, name='search'),
 ]

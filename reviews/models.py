@@ -1,6 +1,8 @@
 from django.db import models
 from movies.models import Movie
-from django.conf import settings
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 # Create your models here.
 class Review(models.Model):
@@ -19,11 +21,22 @@ class Review(models.Model):
     )
     
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='reviews')
-    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviews')
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     content = models.TextField()
     rank = models.IntegerField(choices=CHOICES)
+    likes = models.ManyToManyField(User, blank=True, related_name='Like')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class Like(models.Model):
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
 class Comment(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
-    commenter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments')
+    commenter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

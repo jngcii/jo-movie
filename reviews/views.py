@@ -20,10 +20,10 @@ def create_review(request, movie_pk):
         review.reviewer = request.user
         review.movie = movie
         review.save()
-        return redirect('detail', movie_pk)
+        return redirect('movie_detail', movie_pk)
     else:
         messages.error(request, '리뷰를 다시 입력해주세요.')
-    return redirect('detail', movie_pk)
+    return redirect('movie_detail', movie_pk)
 
 # 리뷰 수정
 @login_required
@@ -35,10 +35,10 @@ def update_review(request, review_pk):
 
     if form.is_valid():
         form.save()
-        return redirect('detail', movie_pk)
+        return redirect('movie_detail', movie_pk)
     else:
         messages.error(request, '리뷰를 다시 입력해주세요.')
-    return redirect('detail', movie_pk)
+    return redirect('movie_detail', movie_pk)
 
 # 리뷰 삭제
 @login_required
@@ -49,7 +49,7 @@ def delete_review(request, review_pk):
         review.delete()
     else:
         message.error(request, '삭제 권한이 없습니다.')
-    return redirect('detail', movie_pk)
+    return redirect('movie_detail', movie_pk)
 
 # 리뷰 디테일
 def detail(request, review_pk):
@@ -63,6 +63,7 @@ def detail(request, review_pk):
 
 # 코멘트 생성
 @login_required
+@require_POST
 def create_comment(request, review_pk):
     review = get_object_or_404(Review, pk=review_pk)
     form = CommentForm(request.POST)
@@ -101,3 +102,16 @@ def delete_comment(request, comment_pk):
     else:
         message.error(request, '삭제 권한이 없습니다.')
     return redirect('reviews:detail', review_pk)
+
+
+@login_required
+def like_review(request, review_pk):
+    user = request.user
+    review = get_object_or_404(Review, pk=review_pk)
+    
+    if user in review.likes:
+        review.likes.remove(user)
+    else:
+        review.likes.add(user)
+    
+    return redirect(request.path)
