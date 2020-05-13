@@ -1,33 +1,100 @@
 {% extends 'base.html' %}
 
 {% block body %}
-{% if request.user.id == review.reviewer.id %}
-    <a href="{% url 'reviews:delete_review' review.id %}">삭제</a>
-{% endif %}
 
-<p>{{ review.rank }}</p>
-<p>{{ review.content }}</p>
-<p>{{ review.reviewer.username }}</p>
-<p>{{ review.created_at }}</p>
+<div class="d-flex">
+    <div class="mr-3" style="flex: 1;">
+        <h3>{{review.content}}</h3>
+        {% if review.rank > 0 %}
+        <i class="fa fa-star" style="color: #e6cb20;"></i>
+        {% endif %}
+        {% if review.rank > 1 %}
+        <i class="fa fa-star" style="color: #e6cb20;"></i>
+        {% endif %}
+        {% if review.rank > 2 %}
+        <i class="fa fa-star" style="color: #e6cb20;"></i>
+        {% endif %}
+        {% if review.rank > 3 %}
+        <i class="fa fa-star" style="color: #e6cb20;"></i>
+        {% endif %}
+        {% if review.rank > 4 %}
+        <i class="fa fa-star" style="color: #e6cb20;"></i>
+        {% endif %}
+        {% if review.rank > 5 %}
+        <i class="fa fa-star" style="color: #e6cb20;"></i>
+        {% endif %}
+        {% if review.rank > 6 %}
+        <i class="fa fa-star" style="color: #e6cb20;"></i>
+        {% endif %}
+        {% if review.rank > 7 %}
+        <i class="fa fa-star" style="color: #e6cb20;"></i>
+        {% endif %}
+        {% if review.rank > 8 %}
+        <i class="fa fa-star" style="color: #e6cb20;"></i>
+        {% endif %}
+        {% if review.rank > 9 %}
+        <i class="fa fa-star" style="color: #e6cb20;"></i>
+        {% endif %}
+    </div>
 
+    {% if request.user.id == review.reviewer.id %}
+        <a href="{% url 'reviews:delete_review' review.id %}" class="btn btn-danger text-white font-weight-bold" style="width: 80px; height: 40px;">삭제</a>
+    {% endif %}
+</div>
+
+<div class="d-flex justify-content-between mb-5">
+    <a class="h6 text-dark" style="text-decoration: none;">{{ review.reviewer.username }}</a>
+    <span class="text-secondary">{{ review.created_at }}</span>
+</div>
+
+<hr>
+
+<div class="d-flex flex-column align-items-center justify-content-center">
+    <a href="{% url 'reviews:like_review' review.id %}">
+        {% if request.user in review.likes.all %}
+        <img
+            src="https://post-phinf.pstatic.net/MjAxNzEyMDdfMjg2/MDAxNTEyNjEzMjkzODM2.UXpf61J8jkuUtLovSjHPy3jytVFWeXdqOTlD0_2ngO8g.lffHMa2yRFYCx_vpn9bkGD8rhi4Iua-Vh4y2EhTcF7gg.PNG/%EB%AC%B4%ED%95%9C%EB%8F%84%EC%A0%84_%EC%A1%B0%EC%84%B8%ED%98%B810.png?type=w1200"
+            style="width: 100px; border-radius: 50px; margin-bottom: 10px;"
+        >
+        {% else %}
+        <img
+            src="https://post-phinf.pstatic.net/MjAxNzEyMDdfMjg2/MDAxNTEyNjEzMjkzODM2.UXpf61J8jkuUtLovSjHPy3jytVFWeXdqOTlD0_2ngO8g.lffHMa2yRFYCx_vpn9bkGD8rhi4Iua-Vh4y2EhTcF7gg.PNG/%EB%AC%B4%ED%95%9C%EB%8F%84%EC%A0%84_%EC%A1%B0%EC%84%B8%ED%98%B810.png?type=w1200"
+            style="width: 100px; border-radius: 50px; margin-bottom: 10px; opacity: 0.5;"
+        >
+        {% endif %}
+    </a>
+    <p>현재 : {{ review.like_count }}세호</p>
+</div>
 
 {% if request.user.is_authenticated %}
 <form action="{% url 'reviews:create_comment' review.id %}" method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">글 올리기</button>
+    <div class="d-flex">
+        <div class="form-group" style="flex: 1; height: 40px;">
+          <input class="form-control" name="content" placeholder="댓글을 달아주세호">
+        </div>
+        <button class="btn btn-success" type="submit" style="margin-left: 20px; width: 100px; height: 40px;">댓글 달기</button>
+    </div>
 </form>
 
 {% endif %}
 
 {% for comment in review.comments.all %}
-<div>
-    {{ comment.content }}
-    {{ comment.commenter.username }}
-    {{ comment.created_at }}
-    {% if request.user.id == comment.commenter.id %}
-        <a href="{% url 'reviews:delete_comment' comment.id %}">삭제</a>
-    {% endif %}
+<div class="pt-2 px-5 border-bottom">
+    <div>
+        <span class="h6 mr-3">{{ comment.commenter.username }}</span>
+    
+        {% if request.user.id == comment.commenter.id %}
+            <a class="float-right text-danger" href="{% url 'reviews:delete_comment' comment.id %}" style="font-weight: bold;">삭제</a>
+        {% endif %}
+    </div>
+
+    <div class="d-flex justify-content-between py-3">
+        <a href="{% url 'reviews:detail' comment.id %}" style="text-decoration: none;">
+            <span class="text-dark">{{ comment.content }}</span>
+        </a>
+        <span class="text-secondary">{{ comment.created_at }}</span>
+    </div>
 </div>
 {% endfor %}
 

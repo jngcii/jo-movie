@@ -2,33 +2,67 @@
 
 {% block body %}
 
-<h1>{{ movie.title }}</h1>
+<div class="row p-3">
 
-<p>{{ movie.description }}</p>
+    <h1 class="col-12 px-5 pb-3">{{ movie.title }}</h1>
 
-<img src={{ movie.poster }}>
+    <div class="col-12 col-md-4 d-flex align-items-center justify-content-center">
+        <img src={{ movie.poster }} style="width: 230px;">
+    </div>
+
+    <div class="col-12 col-md-8">
+        <p>{{ movie.description }}</p>
+    </div>
+
+</div>
+
+<hr>
 
 {% if request.user.is_authenticated %}
 <form action="{% url 'reviews:create_review' movie.id %}" method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">글 올리기</button>
+    <div class="form-group">
+      <select class="form-control" id="exampleFormControlSelect1" name="rank">
+        <option>0</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+      </select>
+    </div>
+    <div class="d-flex">
+        <div class="form-group" style="flex: 1; height: 40px;">
+          <input class="form-control" name="content" placeholder="이 영화에 대한 감상평을 적어주세호">
+        </div>
+        <button class="btn btn-success" type="submit" style="margin-left: 20px; width: 100px; height: 40px;">글 올리기</button>
+    </div>
 </form>
 
 {% endif %}
 
 {% for review in movie.reviews.all %}
-<div>
-    <a href="{% url 'reviews:detail' review.id %}">
-        {{ review.rank }}
-        {{ review.content }}
-        {{ review.reviewer.username }}
-        {{ review.created_at }}
-    </a>
+<div class="pt-3 px-3 border-bottom">
+    <div>
+        <span class="h5 mr-3">{{ review.reviewer.username }}</span>
+        <span class="h5 text-secondary">{{ review.rank }}</span>
     
-    {% if request.user.id == review.reviewer.id %}
-        <a href="{% url 'reviews:delete_review' review.id %}">삭제</a>
-    {% endif %}
+        {% if request.user.id == review.reviewer.id %}
+            <a class="float-right text-danger" href="{% url 'reviews:delete_review' review.id %}" style="font-weight: bold;">삭제</a>
+        {% endif %}
+    </div>
+
+    <div class="d-flex justify-content-between py-3">
+        <a href="{% url 'reviews:detail' review.id %}" style="text-decoration: none;">
+            <span class="text-dark">{{ review.content }}</span>
+        </a>
+        <span class="text-secondary">{{ review.created_at }}</span>
+    </div>
 </div>
 {% endfor %}
 

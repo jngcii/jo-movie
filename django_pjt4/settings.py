@@ -127,4 +127,4 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.User'
 
-LOGIN_REDIRECT_URL = '/auth/login/'
+LOGIN_URL = '/auth/login/'

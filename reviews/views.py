@@ -107,11 +107,19 @@ def delete_comment(request, comment_pk):
 @login_required
 def like_review(request, review_pk):
     user = request.user
-    review = get_object_or_404(Review, pk=review_pk)
-    
-    if user in review.likes:
-        review.likes.remove(user)
+
+    if user.is_authenticated:
+
+        review = get_object_or_404(Review, pk=review_pk)
+        
+        if user in review.likes.all():
+            print('hi')
+            review.likes.remove(user)
+        else:
+            print('bye')
+            review.likes.add(user)
+
     else:
-        review.likes.add(user)
-    
-    return redirect(request.path)
+        return redirect('users:login')
+        
+    return redirect('reviews:detail', review_pk)
